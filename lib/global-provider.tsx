@@ -4,6 +4,14 @@ import { getCurrentUser } from "./appwrite";
 import { useAppwrite } from "./useAppwrite";
 
 
+interface GlobalContextType {
+    isLoggedIn: boolean;
+    user: User | null;
+    loading: boolean;
+    // refetch: (newParams?: Record<string, string | number>) => Promise<void>;
+    // refetch: (newParams?: Record<string, string | number>) => Promise<void>;
+    refetch:() => void
+}
 interface User {
     $id: string;
     name: string;
@@ -11,19 +19,12 @@ interface User {
     avatar: string;
 }
 
-interface GlobalContextType {
-    isLoggedIn: boolean;
-    user: User | null;
-    loading: boolean;
-    // refetch: (newParams?: Record<string, string | number>) => Promise<void>;
-    refetch: (newParams?: Record<string, string | number>) => Promise<void>;
-}
+
+const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
 
 interface GlobalProviderProps {
   children: ReactNode;
 }
-
-const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
 
 export const GlobalProvider = ({ children } : GlobalProviderProps) => {
     const {
@@ -52,9 +53,9 @@ export const GlobalProvider = ({ children } : GlobalProviderProps) => {
 
 export const useGlobalContext = (): GlobalContextType => {
   const context = useContext(GlobalContext);
-  if (!context) {
+  if (!context) 
     throw new Error("useGlobalContext must be used within a GlobalProvider");
-  }
+  
   return context;
 };
 

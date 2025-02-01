@@ -34,7 +34,7 @@ export const FeatureCard = ({ onPress }: Props) => {
           Townhome
         </Text>
         <Text className="text-base font-rubik text-white">
-          1358 Stars Lane {"\n"}
+          38 Big Jim Lane {"\n"}
           Dallas, Texas
         </Text>
         <View className="flex flex-row items-center justify-between w-full">
