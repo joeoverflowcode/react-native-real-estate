@@ -12,8 +12,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import images from "@/constants/images";
 import icons from "@/constants/icons";
 import { login } from "@/lib/appwrite";
+import { useGlobalContext } from "@/lib/global-provider";
+import { Redirect } from "expo-router";
 
 const SignIn = () => {
+  const { refetch, loading, isLoggedIn } = useGlobalContext()
+
+  if(!loading && isLoggedIn) return <Redirect href="/" />
+  
   const handleLogin = async () => {
     const result = await login();
 
@@ -41,6 +47,7 @@ const SignIn = () => {
             You're Going To Love {"\n"}
             <Text className="text-primary-300">Your New Home</Text>
           </Text>
+            {/* <Text className="text-center text-lg">Woo!</Text> */}
 
           <Text className="text-lg font-rubik text-black-200 text-center mt-12">
             Login to Monument Realty with Google
