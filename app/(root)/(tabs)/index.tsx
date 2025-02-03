@@ -23,45 +23,55 @@ import NoResults from "@/components/NoResults";
 
 export default function Index() {
   const { user } = useGlobalContext();
-  const params = useLocalSearchParams<{ query?: string; filter?: string;}>()
-  const {data: latestProperties, loading:latestPropertiesLoading} = useAppwrite({
-    fn: getLatestProperties,
-  })
+  const params = useLocalSearchParams<{ query?: string; filter?: string }>();
+  const { data: latestProperties, loading: latestPropertiesLoading } =
+    useAppwrite({
+      fn: getLatestProperties,
+    });
 
-  const {data: properties, refetch, loading} = useAppwrite({
-    fn: getProperties, params: {
+  const {
+    data: properties,
+    refetch,
+    loading,
+  } = useAppwrite({
+    fn: getProperties,
+    params: {
       filter: params.filter!,
       query: params.query!,
       limit: 6,
     },
     skip: true,
-  })
+  });
 
-  useEffect(()=> {
-refetch({
-  filter: params.filter!,
-  query: params.query!,
-  limit: 6,
-})
-  }, [params.filter, params.query])
+  useEffect(() => {
+    refetch({
+      filter: params.filter!,
+      query: params.query!,
+      limit: 6,
+    });
+  }, [params.filter, params.query]);
 
-  const handleCardPress = (id: string)=> router.push(`/properties/${id}`)
+  const handleCardPress = (id: string) => router.push(`/properties/${id}`);
 
   return (
     <SafeAreaView className="bg-white h-full">
       {/* <Button title="Seed" onPress={seed} /> */}
       <FlatList
         data={properties}
-        renderItem={({ item }) => <Card item={item} onPress={()=> handleCardPress(item.$id)} />}
-        keyExtractor={(item) => item.toString()}
+        renderItem={({ item }) => (
+          <Card item={item} onPress={() => handleCardPress(item.$id)} />
+        )}
+        keyExtractor={(item) => item.$id}
         numColumns={2}
         contentContainerClassName="pb-32"
         columnWrapperClassName="flex gap-5 px-5"
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
           loading ? (
-          <ActivityIndicator size='large' className="text-primary-300 mt-5"/>
-        ) : <NoResults/>
+            <ActivityIndicator size="large" className="text-primary-300 mt-5" />
+          ) : (
+            <NoResults />
+          )
         }
         ListHeaderComponent={
           <View className="px-5">
@@ -96,32 +106,41 @@ refetch({
                 </TouchableOpacity>
               </View>
 
-              <FlatList
-                data={properties}
-                keyExtractor={(item) => item.toString()}
-                renderItem={({ item }) => (
-                <FeatureCard item={item} onPress={() => handleCardPress(item.$id)}
+              {latestPropertiesLoading ? (
+                <ActivityIndicator size="large" className="text-primary-300" />
+              ) : !latestProperties || latestProperties.length === 0 ? (
+                <NoResults />
+              ) : (
+                <FlatList
+                  data={latestProperties}
+                  keyExtractor={(item) => item.$id}
+                  renderItem={({ item }) => (
+                    <FeatureCard
+                      item={item}
+                      onPress={() => handleCardPress(item.$id)}
+                    />
+                  )}
+                  horizontal
+                  bounces={false}
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerClassName="flex gap-5 mt-5"
                 />
               )}
-                horizontal
-                bounces={false}
-                showsHorizontalScrollIndicator={false}
-                contentContainerClassName="flex gap-5 mt-5"
-              />
             </View>
-
-            <View className="flex flex-row items-center justify-between">
-              <Text className="text-xl font-rubik-bold text-black-300">
-                Our Recommendation
-              </Text>
-              <TouchableOpacity>
-                <Text className="text-base font-rubik-bold text-primary-300">
-                  See All
+            <View className="mt-5">
+              <View className="flex flex-row items-center justify-between">
+                <Text className="text-xl font-rubik-bold text-black-300">
+                  Our Recommendation
                 </Text>
-              </TouchableOpacity>
-            </View>
+                <TouchableOpacity>
+                  <Text className="text-base font-rubik-bold text-primary-300">
+                    See All
+                  </Text>
+                </TouchableOpacity>
+              </View>
 
-            <Filters />
+              <Filters />
+            </View>
           </View>
         }
       />
