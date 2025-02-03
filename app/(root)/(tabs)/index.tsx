@@ -55,7 +55,7 @@ export default function Index() {
 
   return (
     <SafeAreaView className="bg-white h-full">
-      {/* <Button title="Seed" onPress={seed} /> */}
+      <Button title="Seed" onPress={seed} />
       <FlatList
         data={properties}
         renderItem={({ item }) => (
