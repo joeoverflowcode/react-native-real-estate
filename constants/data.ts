@@ -58,12 +58,12 @@ export const featuredCards = [
 export const categories = [
   { title: "All", category: "All" },
   { title: "Houses", category: "House" },
-  { title: "Condos", category: "Condos" },
-  { title: "Duplexes", category: "Duplexes" },
-  { title: "Studios", category: "Studios" },
-  { title: "Villas", category: "Villa" },
-  { title: "Apartments", category: "Apartments" },
   { title: "Townhomes", category: "Townhomes" },
+  { title: "Condos", category: "Condos" },
+  { title: "Studios", category: "Studios" },
+  { title: "Duplexes", category: "Duplexes" },
+  // { title: "Villas", category: "Villa" },
+  { title: "Apartments", category: "Apartments" },
   { title: "Others", category: "Others" },
 ];
 
@@ -108,31 +108,31 @@ export const facilities = [
     icon: icons.laundry,
   },
   {
-    title: "Car Parking",
+    title: "Parking",
     icon: icons.carPark,
   },
-  {
-    title: "Sports Center",
-    icon: icons.run,
-  },
-  {
-    title: "Cutlery",
-    icon: icons.cutlery,
-  },
+  // {
+  //   title: "Sports Center",
+  //   icon: icons.run,
+  // },
+  // {
+  //   title: "Cutlery",
+  //   icon: icons.cutlery,
+  // },
   {
     title: "Gym",
     icon: icons.dumbell,
   },
   {
-    title: "Swimming pool",
+    title: "Pool",
     icon: icons.swim,
   },
+  // {
+  //   title: "Wifi",
+  //   icon: icons.wifi,
+  // },
   {
-    title: "Wifi",
-    icon: icons.wifi,
-  },
-  {
-    title: "Pet Center",
+    title: "Pets",
     icon: icons.dog,
   },
 ];

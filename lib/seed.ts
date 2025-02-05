@@ -5,7 +5,9 @@ import {
   galleryImages,
   propertiesImages,
   reviewImages,
+  realAgents
 } from "./data";
+
 
 const COLLECTIONS = {
   AGENT: config.agentsCollectionId,
@@ -20,7 +22,7 @@ const propertyTypes = [
   "Condos",
   "Duplexes",
   "Studios",
-  "Villa",
+  // "Villa",
   "Apartments",
   "Others",
 ];
@@ -32,6 +34,42 @@ const facilities = [
   "Pool",
   "Pets",
 ];
+
+const streetNames = [
+  "Elm Street",
+  "Mockingbird Lane",
+  "Maple Avenue",
+  "Cedar Road",
+  "Oak Drive",
+  "Willow Way",
+  "Birch Boulevard",
+  "Sycamore Street",
+  "Aspen Lane",
+  "Magnolia Court"
+];
+
+const city =[
+  "Dallas",
+  "Frisco",
+  "Irving",
+  "Carrollton",
+  "Plano",
+  "Richardson",
+  "Prosper",
+  "Denton",
+  "Fort-Worth"
+]
+
+const minPrice = 400000;
+const maxPrice = 900000;
+
+const getValidPrice = () => {
+  let price;
+  do {
+    price = Math.floor(Math.random() * (maxPrice - minPrice + 1)) + minPrice;
+  } while (price % 100 !== 0 && price % 100 !== 90);
+  return price;
+};
 
 function getRandomSubset<T>(
   array: T[],
@@ -88,21 +126,39 @@ async function seed() {
     console.log("Cleared all existing data.");
 
     // Seed Agents
-    const agents = [];
-    for (let i = 1; i <= 5; i++) {
-      const agent = await databases.createDocument(
-        config.databaseId!,
-        COLLECTIONS.AGENT!,
-        ID.unique(),
-        {
-          name: `Agent ${i}`,
-          email: `agent${i}@example.com`,
-          avatar: agentImages[Math.floor(Math.random() * agentImages.length)],
-        }
-      );
-      agents.push(agent);
+    // const agents = [];
+    // for (let i = 1; i <= 5; i++) {
+    //   const agent = await databases.createDocument(
+    //     config.databaseId!,
+    //     COLLECTIONS.AGENT!,
+    //     ID.unique(),
+    //     {
+    //       name: `Agent ${i}`,
+    //       email: `agent${i}@example.com`,
+    //       avatar: agentImages[Math.floor(Math.random() * agentImages.length)],
+    //     }
+    //   );
+    //   agents.push(agent);
+    // }
+    // console.log(`Seeded ${agents.length} agents.`);
+
+        // Seed REAL Agents
+const agents = []
+for (const realAgent of realAgents) {
+  const agent = await databases.createDocument(
+    config.databaseId!,
+    COLLECTIONS.AGENT!,
+    ID.unique(),
+    {
+      name: realAgent.name,
+      email: realAgent.email,
+      avatar: realAgent.avatar,
     }
-    console.log(`Seeded ${agents.length} agents.`);
+  )
+  agents.push(agent)
+}
+console.log(`Seeded ${agents.length} agents.`);
+
 
     // Seed Reviews
     const reviews = [];
@@ -137,7 +193,7 @@ async function seed() {
     console.log(`Seeded ${galleries.length} galleries.`);
 
     // Seed Properties
-    for (let i = 1; i <= 20; i++) {
+    for (let i = 1; i <= 16; i++) {
       const assignedAgent = agents[Math.floor(Math.random() * agents.length)];
 
       const assignedReviews = getRandomSubset(reviews, 5, 7); // 5 to 7 reviews
@@ -154,28 +210,32 @@ async function seed() {
               Math.floor(Math.random() * propertiesImages.length)
             ];
 
-      const property = await databases.createDocument(
-        config.databaseId!,
-        COLLECTIONS.PROPERTY!,
-        ID.unique(),
-        {
-          name: `Property ${i}`,
-          type: propertyTypes[Math.floor(Math.random() * propertyTypes.length)],
-          description: `This is the description for Property ${i}.`,
-          address: `123 Property Street, City ${i}`,
-          geolocation: `192.168.1.${i}, 192.168.1.${i}`,
-          price: Math.floor(Math.random() * 9000) + 1000,
-          area: Math.floor(Math.random() * 3000) + 500,
-          bedrooms: Math.floor(Math.random() * 5) + 1,
-          bathrooms: Math.floor(Math.random() * 5) + 1,
-          rating: Math.floor(Math.random() * 5) + 1,
-          facilities: selectedFacilities,
-          image: image,
-          agent: assignedAgent.$id,
-          reviews: assignedReviews.map((review) => review.$id),
-          gallery: assignedGalleries.map((gallery) => gallery.$id),
-        }
-      );
+            const property = await databases.createDocument(
+              
+              config.databaseId!,
+              COLLECTIONS.PROPERTY!,
+              ID.unique(),
+              {
+                name: `Property ${i}`,
+                type: propertyTypes[Math.floor(Math.random() * propertyTypes.length)],
+                description: `This is the description for Property ${i}.`,
+                address: `${Math.floor(Math.random() * 9999) + 1} ${
+                  streetNames[Math.floor(Math.random() * streetNames.length)]
+                }, ${city[Math.floor(Math.random() * city.length)]}, Texas`,
+                geolocation: `192.168.1.${i}, 192.168.1.${i}`,
+                // price: Math.floor((Math.random() * (maxPrice - minPrice + 1) + minPrice) / 10) * 10,
+                price:getValidPrice(),
+                area: Math.floor(Math.random() * 3000) + 500,
+                bedrooms: Math.floor(Math.random() * 5) + 1,
+                bathrooms: Math.floor(Math.random() * 5) + 1,
+                rating: Math.floor((Math.random() * 15) + 35) / 10,
+                facilities: selectedFacilities,
+                image: image,
+                agent: assignedAgent.$id,
+                reviews: assignedReviews.map((review) => review.$id),
+                gallery: assignedGalleries.map((gallery) => gallery.$id),
+              }
+            );
 
       console.log(`Seeded property: ${property.name}`);
     }

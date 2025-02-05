@@ -33,14 +33,15 @@ export const FeatureCard = ({ item: {image, rating, name, address, price}, onPre
           className="text-xl font-rubik-extra-bold text-white"
           numberOfLines={1}
         >
-          {name}
+          {address.split(',')[0]}
         </Text>
-        <Text className="text-base font-rubik text-white">
-          {address}
+        <Text className="text-base font-rubik text-white"
+        numberOfLines={1}>
+          {address.split(',').slice(1).join(',').trim()}
         </Text>
         <View className="flex flex-row items-center justify-between w-full">
           <Text className="text-xl font-rubik-extra-bold text-white">
-            ${price}
+            ${price.toLocaleString()}
           </Text>
 
           <Image source={icons.heart} className="size-6" />
@@ -66,16 +67,17 @@ export const Card = ({ item: {name, price, image, address, rating}, onPress }: P
 <Image source={{uri:image}} className="w-full h-40 rounded-lg"/>
       <View className="flex flex-col mt-2">
         <Text
-          className="text-base font-rubik-bold text-black-300"
+          className="text-sm font-rubik-bold text-black-300"
+          numberOfLines={1}
         >
-          {name}
+          {address.split(',')[0]}
         </Text>
         <Text className="text-xs font-rubik text-black-200">
-          {address}
+        {address.split(',').slice(1).join(',').trim()}
         </Text>
         <View className="flex flex-row items-center justify-between mt-2">
           <Text className="text-base font-rubik-bold text-primary-300">
-            ${price}
+            ${price.toLocaleString()}
           </Text>
 
           <Image source={icons.heart} className="w-5 h-5 mr-2" tintColor="#191d31" />

@@ -71,8 +71,11 @@ const Property = () => {
         </View>
 
         <View className="px-5 mt-7 flex gap-2">
-          <Text className="text-2xl font-rubik-extra-bold">
-            {property?.name}
+          <Text className="text-2xl font-rubik-extra-bold" numberOfLines={2}>
+            {property?.address.split(',')[0]}
+          </Text>
+          <Text className="text-xl font-rubik-extra-bold" numberOfLines={2}>
+            {property?.address.split(',').slice(1).join(',').trim()}
           </Text>
 
           <View className="flex flex-row items-center gap-3">
@@ -251,19 +254,19 @@ const Property = () => {
         <View className="flex flex-row items-center justify-between gap-10">
           <View className="flex flex-col items-start">
             <Text className="text-black-200 text-xs font-rubik-medium">
-              Price
+              Listed Price
             </Text>
             <Text
               numberOfLines={1}
               className="text-primary-300 text-start text-2xl font-rubik-bold"
             >
-              ${property?.price}
+              ${property?.price.toLocaleString()}
             </Text>
           </View>
 
           <TouchableOpacity className="flex-1 flex flex-row items-center justify-center bg-primary-300 py-3 rounded-full shadow-md shadow-zinc-400">
             <Text className="text-white text-lg text-center font-rubik-bold">
-              Book Now
+              Contact Agent
             </Text>
           </TouchableOpacity>
         </View>
