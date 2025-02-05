@@ -4,10 +4,10 @@ import {
   agentImages,
   galleryImages,
   propertiesImages,
-  reviewImages,
-  realAgents
+  reviewPeople,
+  realAgents,
+  reviewSentences
 } from "./data";
-
 
 const COLLECTIONS = {
   AGENT: config.agentsCollectionId,
@@ -105,6 +105,11 @@ function getRandomSubset<T>(
   return arrayCopy.slice(0, subsetSize);
 }
 
+// Shuffle Reviews Array
+export function shuffleArray<T>(array: T[]): T[] {
+  return array.sort(() => Math.random() - 0.5);
+}
+
 async function seed() {
   try {
     // Clear existing data from all collections
@@ -162,15 +167,17 @@ console.log(`Seeded ${agents.length} agents.`);
 
     // Seed Reviews
     const reviews = [];
-    for (let i = 1; i <= 20; i++) {
+    for (let i = 1; i <= 16; i++) {
+      const randomReview = reviewSentences[Math.floor(Math.random() * reviewSentences.length)]
+      const randomPerson = reviewPeople[Math.floor(Math.random() * reviewPeople.length)]
       const review = await databases.createDocument(
         config.databaseId!,
         COLLECTIONS.REVIEWS!,
         ID.unique(),
         {
-          name: `Reviewer ${i}`,
-          avatar: reviewImages[Math.floor(Math.random() * reviewImages.length)],
-          review: `This is a review by Reviewer ${i}.`,
+          name: randomPerson.name,
+          avatar: randomPerson.avatar,
+          review: randomReview,
           rating: Math.floor(Math.random() * 5) + 1, // Rating between 1 and 5
         }
       );
@@ -209,6 +216,9 @@ console.log(`Seeded ${agents.length} agents.`);
           : propertiesImages[
               Math.floor(Math.random() * propertiesImages.length)
             ];
+            const description = shuffleArray(reviewSentences)
+            .slice(0, Math.floor(Math.random() * 4) + 2)
+            .join(" ");
 
             const property = await databases.createDocument(
               
@@ -218,7 +228,7 @@ console.log(`Seeded ${agents.length} agents.`);
               {
                 name: `Property ${i}`,
                 type: propertyTypes[Math.floor(Math.random() * propertyTypes.length)],
-                description: `This is the description for Property ${i}.`,
+                description: description,
                 address: `${Math.floor(Math.random() * 9999) + 1} ${
                   streetNames[Math.floor(Math.random() * streetNames.length)]
                 }, ${city[Math.floor(Math.random() * city.length)]}, Texas`,

@@ -30,12 +30,14 @@ const SignIn = () => {
     }
   };
   return (
-    <SafeAreaView className="bg-white h-full">
-      <ScrollView contentContainerClassName="h-full">
+    <View className="h-full">
+      <ScrollView 
+      contentContainerClassName="bg-white h-full"
+      >
         <Image
           source={images.onboarding}
           className="w-full h-4/6"
-          resizeMode="contain"
+          // resizeMode="`"
         />
 
         <View className="px-10">
@@ -44,8 +46,8 @@ const SignIn = () => {
           </Text>
 
           <Text className="text-3xl font-rubik-bold text-black-300 text-center mt-2">
-            You're Going To Love {"\n"}
-            <Text className="text-primary-300">Your New Home</Text>
+          The Leading Experts of{"\n"}
+            <Text className="text-3xl tracking-tighter">North Texas Real Estate</Text>
           </Text>
             {/* <Text className="text-center text-lg">Woo!</Text> */}
 
@@ -70,7 +72,7 @@ const SignIn = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+   </View>
   );
 };
 
