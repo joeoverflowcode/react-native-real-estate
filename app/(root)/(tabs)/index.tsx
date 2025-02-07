@@ -17,7 +17,7 @@ import Filters from "@/components/Filters";
 import { useGlobalContext } from "@/lib/global-provider";
 import seed from "@/lib/seed";
 import { useAppwrite } from "@/lib/useAppwrite";
-import { getLatestProperties, getProperties } from "@/lib/appwrite";
+import { getLatestProperties, getProperties, getTopRatedProperties } from "@/lib/appwrite";
 import { useEffect } from "react";
 import NoResults from "@/components/NoResults";
 
@@ -29,6 +29,12 @@ export default function Index() {
       fn: getLatestProperties,
     });
 
+    const {data: topProperties, loading: topPropertiesLoading} = 
+    useAppwrite({
+      fn: getTopRatedProperties,
+    })
+
+
   const {
     data: properties,
     refetch,
@@ -38,7 +44,7 @@ export default function Index() {
     params: {
       filter: params.filter!,
       query: params.query!,
-      limit: 6,
+      limit: 3,
     },
     skip: true,
   });
@@ -84,9 +90,9 @@ export default function Index() {
                 <View className="flex flex-col items-start ml-2 justify-center">
                   <Text className="text-xs font-rubik text-black-100">
                     Good Morning
-                  </Text>{" "}
+                  </Text>
                   <Text className="text-base text-black-300 font-rubik-medium">
-                    Joe
+                    {user?.name}
                   </Text>
                 </View>
               </View>
@@ -99,20 +105,20 @@ export default function Index() {
                 <Text className="text-xl font-rubik-bold text-black-300">
                   Featured
                 </Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=> router.push("/featured")}>
                   <Text className="text-base font-rubik-bold text-primary-300">
                     See All
                   </Text>
                 </TouchableOpacity>
               </View>
 
-              {latestPropertiesLoading ? (
+              {topPropertiesLoading ? (
                 <ActivityIndicator size="large" className="text-primary-300" />
-              ) : !latestProperties || latestProperties.length === 0 ? (
+              ) : !topProperties || topProperties.length === 0 ? (
                 <NoResults />
               ) : (
                 <FlatList
-                  data={latestProperties}
+                  data={topProperties}
                   keyExtractor={(item) => item.$id}
                   renderItem={({ item }) => (
                     <FeatureCard

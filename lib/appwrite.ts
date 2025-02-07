@@ -92,12 +92,26 @@ export async function getLatestProperties(){
     const result = await databases.listDocuments(
       config.databaseId!,
       config.propertiesCollectionId!,
-      [Query.orderAsc("$createdAt"), Query.limit(5)]
+      [Query.orderAsc("$createdAt"), Query.limit(4)]
     )
     return result.documents
   } catch (error){
     console.error(error)
     return[]
+  }
+}
+
+export async function getTopRatedProperties(){
+  try {
+    const results = await databases.listDocuments(
+      config.databaseId!,
+      config.propertiesCollectionId!,
+      [Query.orderDesc("rating"), Query.limit(4)]
+    )
+    return results.documents
+  } catch (error) {
+    console.error(error)
+    return []
   }
 }
 

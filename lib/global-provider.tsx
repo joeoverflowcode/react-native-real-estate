@@ -6,11 +6,11 @@ import { useAppwrite } from "./useAppwrite";
 
 interface GlobalContextType {
     isLoggedIn: boolean;
-    user: User | null;
     loading: boolean;
+    user: User | null;
     // refetch: (newParams?: Record<string, string | number>) => Promise<void>;
-    // refetch: (newParams?: Record<string, string | number>) => Promise<void>;
-    refetch:() => void
+    refetch: (newParams?: Record<string, string | number>) => Promise<void>;
+    // refetch:() => void
 }
 interface User {
     $id: string;
@@ -25,6 +25,8 @@ const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
 interface GlobalProviderProps {
   children: ReactNode;
 }
+
+
 
 export const GlobalProvider = ({ children } : GlobalProviderProps) => {
     const {
